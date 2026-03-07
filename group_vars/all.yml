@@ -1,0 +1,7 @@
+ipaserver_domain: ansible.com
+ipaserver_realm: ANSIBLE.COM
+ipaserver_admin_password: 'abcd1234'
+ipaserver_dir_manager_password: 'abcd1234'
+ipaserver_ip: 192.168.1.130
+nfs_export_dir: /home
+nfs_server_ip: 192.168.1.130
