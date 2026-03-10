@@ -1,0 +1,5 @@
+---
+ipaadmin_principal: admin
+ipaclient_domain: treadansible.com
+ipaclient_configure_dns_resolver: yes
+ipaclient_dns_servers: 192.168.1.39
