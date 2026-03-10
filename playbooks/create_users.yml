@@ -1,0 +1,18 @@
+---
+- name: Create users in FreeIPA Server
+  hosts: ipaserver
+  become: true
+  vars_files:
+    - group_vars/users_vault.yml
+  tasks:
+    
+    - name: CreateFreeIPA users from vault
+      freeipa.ansible_freeipa.ipauser:
+        ipaadmin_password: "{{ ipaadmin_password }}"
+        name: "{{ item.username }}"
+        first: "{{ item.first }}"
+        last: "{{ item.last }}"
+        password: "{{ item.password | password_hash('sha512') }}"
+        state: present
+        update_password: on_create
+      loop: "{{ ipa_users }}"
