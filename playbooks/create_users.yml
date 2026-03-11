@@ -15,4 +15,5 @@
         password: "{{ item.password | password_hash('sha512') }}"
         state: present
         update_password: on_create
+        homedir: "{{ item.home }}"
       loop: "{{ ipa_users }}"
