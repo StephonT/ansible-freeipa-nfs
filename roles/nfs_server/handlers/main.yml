@@ -1,2 +1,3 @@
 ---
-# handlers file for nfs_server
+- name: reload exports
+  ansible.builtin.shell: exportfs -rav

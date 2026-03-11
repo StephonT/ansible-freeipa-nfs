@@ -1,2 +1,24 @@
 ---
-# tasks file for nfs_server
+- name: Install nfs-utils
+  ansible.builtin.dnf:
+    name: nfs-utils
+    state: present
+
+- name: Export /home to the entire lab subnet
+  ansible.builtin.lineinfile:
+    line: "/home .treadansible.com(rw,sync,no_root_squash)"
+    path: /etc/exports
+  notify: reload exports
+
+- name: Enable and start nfs-server
+  ansible.builtin.systemd:
+    name: nfs-server
+    state: started
+    enabled: true
+
+- name: Open firewall for NFS
+  ansible.posix.firewalld:
+    service: nfs
+    permanent: true
+    immediate: true
+    state: enabled
