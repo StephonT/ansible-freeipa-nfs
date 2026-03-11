@@ -1,0 +1,11 @@
+---
+- name: Using roles to build different parts of infrastructure
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Building NFS Server and exporting home directories
+      tags: nfs 
+      ansible.builtin.include_role:
+        name: nfs_server
+      when: inventory_hostname in groups['ipaclients']
