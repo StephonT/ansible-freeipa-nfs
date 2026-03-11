@@ -1,2 +1,26 @@
 ---
-# defaults file for nfs_server
+nfs_server_packages:
+  - "nfs-utils"
+  - "autofs"
+
+nfs_server_directory_path: "/treadansible"
+nfs_server_config_file: "/etc/exports"
+
+nfs_server_services:
+  - name: "nfs-server"
+    state: "started"
+    enabled: true
+  - name: "rpcbind"
+    state: "started"
+    enabled: true
+  - name: "autofs"
+    state: "started"
+    enabled: true
+
+nfs_server_firewall_services:
+  - nfs
+  - mountd
+  - rpc-bind
+
+
+nfs_server_export_homedir: "/home  *.treadansible.com(rw,no_root_squash,no_subtree_check)"

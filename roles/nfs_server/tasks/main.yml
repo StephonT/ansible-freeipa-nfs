@@ -1,24 +1,52 @@
 ---
-- name: Install nfs-utils
-  ansible.builtin.dnf:
-    name: nfs-utils
+- name: Install NFS Server Tools
+  ansible.builtin.package:
+    name: "{{ nfs_server_package }}"
     state: present
+  loop: "{{ nfs_server_packages }}"
+  loop_control:
+    loop_var: nfs_server_package
+    label: "Installing {{ nfs_server_package }} package."
 
-- name: Export /home to the entire lab subnet
-  ansible.builtin.lineinfile:
-    line: "/home .treadansible.com(rw,sync,no_root_squash)"
-    path: /etc/exports
-  notify: reload exports
+- name: Set sebool
+  ansible.builtin.command:
+    cmd: "setsebool -P use_nfs_home_dirs on"
 
-- name: Enable and start nfs-server
-  ansible.builtin.systemd:
-    name: nfs-server
-    state: started
-    enabled: true
+- name: Start and enable NFS services
+  ansible.builtin.service:
+    name: "{{ nfs.name }}"
+    state: "{{ nfs.state }}"
+    enabled: "{{ nfs.enabled }}"
+  loop: "{{ nfs_server_services }}"
+  loop_control:
+    loop_var: nfs
+    label: "Starting and enabling {{ nfs.name }} service."
 
-- name: Open firewall for NFS
+- name: Configure /etc/exports dynamically
+  ansible.builtin.template:
+    src: exports.j2
+    dest: "{{ nfs_server_config_file }}"
+  notify: Export file
+
+- name: Enable dynamic automounting
+  ansible.builtin.template:
+    src: auto.master.j2
+    dest: /etc/auto.master
+  notify: Restart autofs service
+
+- name: Allow nfs related services through firewall
   ansible.posix.firewalld:
-    service: nfs
+    service: "{{ nfs_server_firewall_service }}"
+    state: enabled
     permanent: true
     immediate: true
-    state: enabled
+  loop: "{{ nfs_server_firewall_services }}"
+  loop_control:
+    loop_var: nfs_server_firewall_service
+    label: "Adding {{ nfs_server_firewall_service }} service to firewall."
+
+- name: Ensure in /etc/idmapd.conf 'Domain = treadansible.com'
+  ansible.builtin.lineinfile:
+    path: /etc/idmapd.conf
+    regexp: '^#Domain ='
+    line: Domain = treadansible.com
