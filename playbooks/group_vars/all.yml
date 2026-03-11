@@ -1,0 +1,32 @@
+---
+ipaadmin_principal: admin
+ipaclient_domain: treadansible.com
+ipaclient_configure_dns_resolver: yes
+ipaclient_dns_servers: 192.168.1.39
+ipaserver_auto_reverse: true
+
+
+# Authentication
+ipaadmin_password: "REDACTED"
+ipadm_password: "REDACTED"
+
+# Domain 
+ipaserver_domain: treadansible.com
+ipaserver_realm: TREADANSIBLE.COM
+
+# DNS
+ipaserver_setup_dns: yes
+ipaserver_auto_forwarders: yes
+ipaserver_no_dnssec_validation: yes
+
+# Firewall - let the role handle it
+ipaserver_setup_firewalld: yes
+
+# NTP - important for Kerberos
+ipaserver_setup_ntp: yes
+
+# Explicitly set the hostname so the role doesn't guess
+ipaserver_hostname: freeipa.treadansible.com
+
+# Allow the install to proceed without forward/reverse DNS being perfect
+ipaserver_no_host_dns: no 
