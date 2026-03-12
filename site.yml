@@ -1,11 +1,16 @@
 ---
-- name: Using roles to build different parts of infrastructure
-  hosts: all
-  become: true
-  tasks:
+- name: Deploy IPA Server 
+  ansible.builtin.import_playbook: install-server.yml
 
-    - name: Building NFS Server and exporting home directories
-      tags: nfs 
-      ansible.builtin.include_role:
-        name: nfs_server
-      when: inventory_hostname in groups['ipaclients']
+- name: Enroll FreeIPA Clients
+  ansible.builtin.import_playbook: install-client.yml
+
+- name: Configure NFS Server
+  hosts: nfsserver
+  become: true
+  roles:
+    - nfs_server
+
+- name: Create FreeIPA Users
+  ansible.builtin.import_playbook: create_users.yml
+    
