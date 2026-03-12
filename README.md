@@ -1,6 +1,6 @@
 # ansible-freeipa-nfs
 
-**RHCE Ansible Apprenticeship — Project 1**
+**Build FreeIPA Server and NFS Server**
 
 Automate a FreeIPA identity management environment with NFS roaming home directories using Ansible. This project deploys a FreeIPA server, enrolls three client machines into the domain, provisions users, and configures every client to export and mount home directories over NFS using the `/net -hosts` autofs wildcard map.
 
@@ -116,7 +116,7 @@ ansible-galaxy collection install -r requirements.yml -p ./collections
 [defaults]
 inventory         = inventory/hosts.ini
 remote_user       = your_ssh_user
-private_key_file  = ~/.ssh/id_rsa
+host_key_checking  = false
 collections_paths = ./collections:~/.ansible/collections:/usr/share/ansible/collections
 roles_path        = ./roles:~/.ansible/roles:/usr/share/ansible/roles
 ```
