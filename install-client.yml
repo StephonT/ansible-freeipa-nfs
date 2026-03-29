@@ -1,6 +1,6 @@
 ---
 - name: Playbook to configure IPA clients with username/password
-  hosts: ipaclients
+  hosts: awx_tower
   become: true
   pre_tasks:
     - name: Copy /etc/hosts file to hosts
